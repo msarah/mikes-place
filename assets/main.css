@@ -1,0 +1,51 @@
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: aliceblue;
+  font-family: "Montserrat", sans-serif;
+}
+
+.above-fold-container {
+  display: flex;
+  flex-flow: row wrap;
+  height: 100vh;
+  background-image: url("pool-table.jpg");
+  background-size: cover;
+  background-color: orangered;
+  background-repeat: no-repeat;
+}
+
+.above-fold-item {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+h1.above-fold-item {
+  align-items: center;
+  font-size: 2.5rem;
+}
+
+div.above-fold-item {
+  align-items: flex-start;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form>input {
+  margin: 20px 0;
+  padding: 20px 100px;
+  border-radius: 5px;
+  color: #000000;
+}
+
+input.login-button {
+  background-color: orangered;
+  font-size: 2rem;
+  color: aliceblue;
+}
