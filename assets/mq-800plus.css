@@ -1,3 +1,15 @@
 h1.above-fold-item {
   font-size: 6rem;
 }
+
+input {
+  padding: 20px 100px;
+}
+
+.text-input {
+  font-size: 2rem;
+}
+
+.login-button {
+  font-size: 3rem;
+}
