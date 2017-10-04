@@ -18,12 +18,23 @@ func main() {
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 
 	http.HandleFunc("/", index)
-
+	http.HandleFunc("/login", login)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	if err := tpl.ExecuteTemplate(w, "index.html", nil); err != nil {
+	if err := tpl.ExecuteTemplate(w, "index.gohtml", nil); err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	var u string
+	var p string
+
+	if r.Method == http.MethodPost {
+		u = r.FormValue("username")
+		p = r.FormValue("password")
+	}
+
 }

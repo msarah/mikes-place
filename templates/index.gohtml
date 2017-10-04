@@ -15,11 +15,7 @@
   <section class="above-fold-container">
     <h1 class="above-fold-item">Mike's Place</h1>
     <div class="above-fold-item">
-      <form action="/" method="post" class="login-form">
-        <input class="text-input" type="text" autofocus="true" title="Enter Username" placeholder="Username" name="username">
-        <input class="text-input" type="text" title="Enter Password" placeholder="Password" name="password">
-        <input class="login-button" type="submit" name="login" value="Log In">
-      </form>
+      {{template "login-form"}}
     </div>
 
   </section>
