@@ -34,7 +34,6 @@ div.above-fold-item {
 
 input {
   margin: 20px 0;
-  padding: 20px 20px;
   border-radius: 5px;
 }
 
@@ -45,12 +44,13 @@ input {
 
 .text-input {
   color: #000000;
-  text-align: left;
+  padding: 20px;
   font-size: 1rem;
 }
 
 .login-button {
   background-color: orangered;
   font-size: 2rem;
+  padding: 40px 40px;
   color: aliceblue;
 }
