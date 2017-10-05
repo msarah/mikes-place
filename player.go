@@ -11,7 +11,7 @@ import (
 type Player struct {
 	ID      int16
 	Name    string
-	PwHash  string
+	PwHash  []byte
 	Coaster string
 	Wins    int
 	Losses  int
@@ -69,4 +69,11 @@ func (pc *PlayerController) GetPasswordHash(username string) []byte {
 	bs := resultMap["pwhash"].([]byte)
 
 	return bs
+}
+
+//InsertPlayer inserts a player into the player collection in mongo
+func (pc *PlayerController) InsertPlayer(p Player) {
+	if err := pc.PlayersCollection().Insert(p); err != nil {
+		log.Fatalln(err)
+	}
 }

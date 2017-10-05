@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -29,6 +30,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			fmt.Println("passwords match!")
 		}
 
 		tpl.ExecuteTemplate(w, "home.gohtml", u)

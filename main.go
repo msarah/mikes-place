@@ -4,16 +4,27 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
 	tpl *template.Template
 	pc  *PlayerController
+	p   Player
 )
 
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*"))
 	pc = NewPlayerController(GetSession())
+
+	password := "1234"
+	bs, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	p = Player{1, "Sarah", bs, "Bud Light", 0, 0}
+	pc.InsertPlayer(p)
 }
 
 func main() {
