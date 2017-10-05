@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
+	"net/http"
 
+	uuid "github.com/satori/go.uuid"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -15,6 +17,23 @@ type Player struct {
 	Coaster string
 	Wins    int
 	Losses  int
+}
+
+type Session struct {
+	id       string
+	username string
+}
+
+//CreateCookie creates a session cookie for user
+func CreateCookie(w http.ResponseWriter) *http.Cookie {
+	id := uuid.NewV4()
+	c := &http.Cookie{
+		Name:     "session",
+		Value:    id.String(),
+		HttpOnly: true,
+	}
+	http.SetCookie(w, c)
+	return c
 }
 
 //PlayerController is a srtuct through which the database is safely accessed
@@ -74,6 +93,14 @@ func (pc *PlayerController) GetPasswordHash(username string) []byte {
 //InsertPlayer inserts a player into the player collection in mongo
 func (pc *PlayerController) InsertPlayer(p Player) {
 	if err := pc.PlayersCollection().Insert(p); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+/*InsertSession inserts a cookie session into the sessions collection in mongo
+The cookie ID is stored along with the username*/
+func (pc *PlayerController) InsertSession(s Session) {
+	if err := pc.SessionsCollection().Insert(s); err != nil {
 		log.Fatalln(err)
 	}
 }

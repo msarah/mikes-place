@@ -9,6 +9,7 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
+
 	if err := tpl.ExecuteTemplate(w, "index.gohtml", nil); err != nil {
 		log.Fatalln(err)
 	}
@@ -32,6 +33,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 			}
 			fmt.Println("passwords match!")
 		}
+
+		c := CreateCookie(w)
+		s := Session{c.Value, u}
+		pc.InsertSession(s)
 
 		tpl.ExecuteTemplate(w, "home.gohtml", u)
 	}
