@@ -19,9 +19,10 @@ type Player struct {
 	Losses  int
 }
 
+//Session is a struct that defines a session cookie
 type Session struct {
-	id       string
-	username string
+	ID       string
+	Username string
 }
 
 //CreateCookie creates a session cookie for user
@@ -31,8 +32,26 @@ func CreateCookie(w http.ResponseWriter) *http.Cookie {
 		Name:     "session",
 		Value:    id.String(),
 		HttpOnly: true,
+		MaxAge:   10080,
 	}
 	http.SetCookie(w, c)
+	return c
+}
+
+//AlreadyLoggedIn checks if a user is logged in already
+func AlreadyLoggedIn(r *http.Request) bool {
+	if _, err := r.Cookie("session"); err == http.ErrNoCookie {
+		return false
+	}
+	return true
+}
+
+//GetCookie gets the session cookie
+func GetCookie(r *http.Request) *http.Cookie {
+	c, err := r.Cookie("session")
+	if err != nil {
+		log.Fatalln(err)
+	}
 	return c
 }
 
@@ -56,10 +75,30 @@ func (pc *PlayerController) SessionsCollection() *mgo.Collection {
 	return pc.session.DB(db).C("sessions")
 }
 
-/*Exist checks the database to see if the given data is available.
-Returns true or false*/
-func (pc *PlayerController) Exist(key, value string) bool {
-	res, err := pc.PlayersCollection().Find(bson.M{key: value}).Count()
+/*GetPlayer retrieves a player from the database
+It uses the sessionID from the cookie to get the username, then takes the username and
+gets the player information from the user collection*/
+func (pc *PlayerController) GetPlayer(sessionID string) Player {
+	var resultMap = bson.M{}
+	var p = Player{}
+	err := pc.SessionsCollection().Find(bson.M{"id": sessionID}).Select(bson.M{"username": 1}).One(&resultMap)
+	if err != nil {
+		//REDIRECT TO HOME - PLAYER NOT FOUND - Javascript
+		log.Fatalln(err)
+	}
+
+	u := resultMap["username"]
+
+	err = pc.PlayersCollection().Find(bson.M{"name": u}).One(&p)
+
+	return p
+
+}
+
+/*PlayerExist checks the database with the given username
+to see if the player exists in the players collection - Returns true or false*/
+func (pc *PlayerController) PlayerExist(username string) bool {
+	res, err := pc.PlayersCollection().Find(bson.M{"name": username}).Count()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -71,7 +110,7 @@ func (pc *PlayerController) Exist(key, value string) bool {
 	return true
 }
 
-//GetPasswordHash retrieves the hashed password associated with given username
+//GetPasswordHash retrieves the hashed password from the database associated with given username
 func (pc *PlayerController) GetPasswordHash(username string) []byte {
 
 	//Scan result from mongo search into resultMap
@@ -98,9 +137,10 @@ func (pc *PlayerController) InsertPlayer(p Player) {
 }
 
 /*InsertSession inserts a cookie session into the sessions collection in mongo
-The cookie ID is stored along with the username*/
+The cookie ID - random session ID given for each new cookie - is stored along with the username*/
 func (pc *PlayerController) InsertSession(s Session) {
-	if err := pc.SessionsCollection().Insert(s); err != nil {
+	err := pc.SessionsCollection().Insert(s)
+	if err != nil {
 		log.Fatalln(err)
 	}
 }
