@@ -10,7 +10,7 @@
   display: flex;
   flex-flow: row wrap;
   height: 100vh;
-  background-image: url("pool-table.jpg");
+  background-image: url("/assets/images/pool-table.jpg");
   background-size: cover;
   background-color: orangered;
   background-repeat: no-repeat;

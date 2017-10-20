@@ -17,6 +17,7 @@ type Player struct {
 	Coaster string
 	Wins    int
 	Losses  int
+	//Admin bool
 }
 
 //Session is a struct that defines a session cookie
@@ -50,7 +51,7 @@ func AlreadyLoggedIn(r *http.Request) bool {
 func GetCookie(r *http.Request) *http.Cookie {
 	c, err := r.Cookie("session")
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 	return c
 }
@@ -143,4 +144,12 @@ func (pc *PlayerController) InsertSession(s Session) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+}
+
+//RemoveSession removes a session from the database
+func (pc *PlayerController) RemoveSession(sessionID string) {
+	if err := pc.SessionsCollection().Remove(bson.M{"id": sessionID}); err != nil {
+		log.Println(err)
+	}
+
 }

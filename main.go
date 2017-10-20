@@ -13,7 +13,7 @@ var (
 )
 
 func init() {
-	tpl = template.Must(template.ParseGlob("templates/*"))
+	tpl = template.Must(template.ParseGlob("assets/templates/*")) //variable that stores access to templates
 	pc = NewPlayerController(GetSession())
 	/*
 		password := "1234"
@@ -28,7 +28,7 @@ func init() {
 
 func main() {
 
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
+	http.Handle("/assets/", removeDirListHandler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets")))))
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 
 	http.HandleFunc("/", index)

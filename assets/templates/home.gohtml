@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mike's Place - Home</title>
+  </head>
+  <body>
+    <h1>Welcome {{.Name}}!</h1>
+    <h4>Where to?</h4>
+
+    <ul>
+      <li><a href="#">LeaderBoard</a></li>
+      <li><a href="#">Player Stats</a></li>
+      <li><a href="#">My Profile</a></li>
+    </ul>
+
+<form action="/logout" method="post">
+    <input type="submit" name="logout" value="Log Out">
+</form>
+
+
+  </body>
+</html>
