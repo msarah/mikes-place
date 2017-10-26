@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Remove Player</title>
+  </head>
+  <body>
+    <h1>Remove Player</h1>
+    <form action="/removePlayer" method="post">
+      <input type="text" name="name" placeholder="Enter Name">
+      <input type="submit" name="removebtn" value="Remove Player">
+    </form>
+    {{if .}}
+    <h2>Player Removed: {{.}}</h2>
+    {{end}}
+  </body>
+</html>

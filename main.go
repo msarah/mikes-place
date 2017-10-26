@@ -15,15 +15,7 @@ var (
 func init() {
 	tpl = template.Must(template.ParseGlob("assets/templates/*")) //variable that stores access to templates
 	pc = NewPlayerController(GetSession())
-	/*
-		password := "1234"
-		bs, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		p = Player{1, "Sarah", bs, "Bud Light", 0, 0}
-		pc.InsertPlayer(p)
-	*/
+	//pc.InsertPlayer(*NewPlayer("Mike", "Samuel Adams", 0, 0, HashPassword("mikesplace"), false))
 }
 
 func main() {
@@ -33,6 +25,9 @@ func main() {
 
 	http.HandleFunc("/", index)
 	http.HandleFunc("/login", login)
+	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/home", home)
+	http.HandleFunc("/addPlayer", addPlayer)
+	http.HandleFunc("/removePlayer", removePlayer)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

@@ -6,12 +6,26 @@
   </head>
   <body>
     <h1>Welcome {{.Name}}!</h1>
+
+    <h2>Player Info:</h2>
+    <h3>Coaster: {{.Coaster}}</h3>
+    <h3>Wins: {{.Wins}}</h3>
+    <h3>Losses: {{.Losses}}</h3>
+    <h3>Admin: {{.Admin}}</h3>
+
+    {{if .Admin}}
+    <h1>You're an Admin!!</h1>
+    {{end}}
+
     <h4>Where to?</h4>
 
     <ul>
       <li><a href="#">LeaderBoard</a></li>
       <li><a href="#">Player Stats</a></li>
-      <li><a href="#">My Profile</a></li>
+      {{if .Admin}}
+      <li><a href="/addPlayer">Add Player</a></li>
+      <li><a href="/removePlayer">Remove Player</a></li>
+      {{end}}
     </ul>
 
 <form action="/logout" method="post">

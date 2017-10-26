@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"golang.org/x/crypto/bcrypt"
+
 	uuid "github.com/satori/go.uuid"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -11,19 +13,33 @@ import (
 
 //Player struct holds basic player information.
 type Player struct {
-	ID      int16
 	Name    string
 	PwHash  []byte
 	Coaster string
 	Wins    int
 	Losses  int
-	//Admin bool
+	Admin   bool
+	//PlayerGames []PlayerGame
 }
 
 //Session is a struct that defines a session cookie
 type Session struct {
 	ID       string
 	Username string
+}
+
+//NewPlayer returns a pointer to a newly constructed player
+func NewPlayer(Name, Coaster string, PwHash []byte, Admin bool) *Player {
+	return &Player{Name, PwHash, Coaster, 0, 0, Admin}
+}
+
+//HashPassword wraps the bcrypt 'GenerateFromPassword' function and returns a byte slice of the hashed string
+func HashPassword(Password string) []byte {
+	bs, err := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.MinCost)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return bs
 }
 
 //CreateCookie creates a session cookie for user
@@ -84,8 +100,8 @@ func (pc *PlayerController) GetPlayer(sessionID string) Player {
 	var p = Player{}
 	err := pc.SessionsCollection().Find(bson.M{"id": sessionID}).Select(bson.M{"username": 1}).One(&resultMap)
 	if err != nil {
-		//REDIRECT TO HOME - PLAYER NOT FOUND - Javascript
-		log.Fatalln(err)
+		log.Println("Could not get player: ", err)
+		return p
 	}
 
 	u := resultMap["username"]
@@ -152,4 +168,11 @@ func (pc *PlayerController) RemoveSession(sessionID string) {
 		log.Println(err)
 	}
 
+}
+
+//RemovePlayer removes a player from the database with given name
+func (pc *PlayerController) RemovePlayer(Name string) {
+	if err := pc.PlayersCollection().Remove(bson.M{"name": Name}); err != nil {
+		log.Println(err)
+	}
 }

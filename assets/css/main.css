@@ -13,7 +13,7 @@
   background-image: url("/assets/images/pool-table.jpg");
   background-size: cover;
   background-color: orangered;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
 }
 
 .above-fold-item {
